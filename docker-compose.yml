@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  webapp-php74:
+    build:
+      context: .
+      dockerfile: ./container/webapp-php74/Dockerfile
+  webapp-php73:
+    build:
+      context: .
+      dockerfile: ./container/webapp-php73/Dockerfile
+  webapp-php72:
+    build:
+      context: .
+      dockerfile: ./container/webapp-php72/Dockerfile
+  webapp-php71:
+    build:
+      context: .
+      dockerfile: ./container/webapp-php71/Dockerfile
+  webapp-php70:
+    build: ./container/webapp-php70
