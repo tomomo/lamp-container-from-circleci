@@ -39,14 +39,14 @@ RUN sudo a2enmod lbmethod_byrequests rewrite \
  # ImageMagick
  imagemagick libmagickwand-dev \
   && \
- sudo pecl install imagick \
+ sudo pecl install imagick redis \
   && \
  sudo apt-get clean
 RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
  sudo docker-php-ext-configure \
  gd --with-freetype --with-jpeg \
   && \
- sudo docker-php-ext-enable imagick \
+ sudo docker-php-ext-enable imagick redis \
   && \
  sudo docker-php-ext-install -j${NPROC} \
  bcmath \
