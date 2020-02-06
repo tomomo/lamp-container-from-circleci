@@ -54,6 +54,8 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
  sudo docker-php-ext-enable imagick \
   && \
  sudo docker-php-ext-install -j${NPROC} \
+ bcmath \
+ ctype \
  curl \
  exif \
  json \
@@ -61,6 +63,7 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
  gd \
  intl \
  mbstring \
+ tokenizer \
  mysqli pdo_mysql \
  pgsql pdo_pgsql
 
