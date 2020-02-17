@@ -73,13 +73,19 @@ services:
       - db
     ports:
       - "8080:80"
+    volumes:
+      - phpmyadmin-session:/sessions
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=db
       - PMA_USER=root
       - PMA_PASSWORD=root
+#docker volume create --name=example-db
+#docker volume create --name=example-phpmyadmin-session
 volumes:
   data:
     external:
-      #docker volume create --name=example-db
       name: "example-db"
+  phpmyadmin-session:
+    external:
+      name: "example-phpmyadmin-session"
