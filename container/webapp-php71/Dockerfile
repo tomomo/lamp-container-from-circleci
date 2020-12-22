@@ -21,14 +21,14 @@ RUN sudo mkdir -p /etc/ssl/certificate && \
  -x509 -days 720 -nodes -newkey rsa:2048 \
  -subj "/C=JP/ST=Tokyo/L=Minato-ku/O=None/OU=Org/CN=localhost" \
  -out    /etc/ssl/certificate/localhost+1.pem \
- -keyout /etc/ssl/certificate/localhost+1-key.pem && \
- sudo a2enmod ssl && \
- sudo a2ensite default-ssl
-# ex) docker-compose.yml
-# - .devcontainer/certificate:/etc/ssl/certificate:ro
+ -keyout /etc/ssl/certificate/localhost+1-key.pem
 
-RUN sudo a2enmod lbmethod_byrequests rewrite \
-  && \
+RUN \
+ sudo a2enmod ssl && \
+ sudo a2enmod lbmethod_byrequests rewrite && \
+ sudo a2dissite 000-default
+
+RUN \
  sudo apt-get install -y \
  # CURL
  libcurl3-dev libonig-dev \
@@ -67,6 +67,7 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
  mysqli pdo_mysql \
  pgsql pdo_pgsql
 
-COPY apache2/sites-available /etc/apache2/sites-available
+# @REVIEW Do not use "available sites", put directly on "sites-enabled".
+COPY ./apache2/sites-available /etc/apache2/sites-enabled
 
 CMD ["sudo", "apachectl", "-D", "FOREGROUND"]
