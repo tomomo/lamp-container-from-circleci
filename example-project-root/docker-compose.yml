@@ -1,6 +1,15 @@
 version: '3.9'
 
 services:
+  webapp-php80:
+    image: lamp-container-from-circleci_webapp-php80
+    restart: always
+    ports:
+      - "3080:80"
+      - "4480:443"
+    volumes:
+      - .:/var/www/html:Z
+      #- ./certificate:/etc/ssl/certificate:ro
   webapp-php74:
     image: lamp-container-from-circleci_webapp-php74
     restart: always
