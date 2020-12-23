@@ -55,36 +55,36 @@ services:
     volumes:
       - .:/var/www/html:Z
       #- ./certificate:/etc/ssl/certificate:ro
-#   db:
-#     image: circleci/mysql:5.5
-#     restart: always
-#     volumes:
-#       - data:/var/lib/mysql
-#     environment:
-#       - MYSQL_ROOT_PASSWORD=root
-#       - MYSQL_DATABASE=example
-#       - MYSQL_USER=user
-#       - MYSQL_PASSWORD=pass
-#   phpmyadmin:
-#     image: phpmyadmin/phpmyadmin:latest
-#     restart: always
-#     depends_on:
-#       - db
-#     ports:
-#       - "8080:80"
-#     volumes:
-#       - phpmyadmin-session:/sessions
-#     environment:
-#       - PMA_ARBITRARY=1
-#       - PMA_HOST=db
-#       - PMA_USER=root
-#       - PMA_PASSWORD=root
-# #docker volume create --name=example-db
-# #docker volume create --name=example-phpmyadmin-session
-# volumes:
-#   data:
-#     external:
-#       name: "example-db"
-#   phpmyadmin-session:
-#     external:
-#       name: "example-phpmyadmin-session"
+  db:
+    image: circleci/mysql:5.5
+    restart: always
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=example
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+  phpmyadmin:
+    image: lamp-container-from-circleci_phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    volumes:
+      - phpmyadmin-session:/sessions
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+#docker volume create --name=example-db
+#docker volume create --name=example-phpmyadmin-session
+volumes:
+  data:
+    external:
+      name: "example-db"
+  phpmyadmin-session:
+    external:
+      name: "example-phpmyadmin-session"
