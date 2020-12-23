@@ -16,21 +16,6 @@ RUN sudo cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
  sudo apt-get clean
 
 RUN \
- sudo mkdir -p /etc/ssl/certificate && \
- sudo chown www-data /etc/ssl/certificate && \
- sudo chmod 400 /etc/ssl/certificate && \
- sudo openssl req \
- -x509 -days 720 -nodes -newkey rsa:2048 \
- -subj "/C=JP/ST=Tokyo/L=Minato-ku/O=None/OU=Org/CN=localhost" \
- -out    /etc/ssl/certificate/localhost+1.pem \
- -keyout /etc/ssl/certificate/localhost+1-key.pem
-
-RUN \
- sudo a2enmod ssl && \
- sudo a2enmod lbmethod_byrequests rewrite && \
- sudo a2dissite 000-default
-
-RUN \
  sudo apt-get install -y \
  # CURL
  libcurl3-dev libonig-dev \
@@ -60,6 +45,23 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
  tokenizer \
  mysqli pdo_mysql \
  pgsql pdo_pgsql
+
+RUN \
+ sudo a2dissite 000-default && \
+ sudo a2enmod lbmethod_byrequests rewrite && \
+ sudo mkdir -p /usr/local/etc/ssl/certificate && \
+ sudo chown www-data /usr/local/etc/ssl/certificate && \
+ sudo chmod 400 /usr/local/etc/ssl/certificate && \
+ sudo openssl req \
+ -x509 -days 720 -nodes -newkey rsa:2048 \
+ -subj "/C=JP/ST=Tokyo/L=Minato-ku/O=None/OU=Org/CN=localhost" \
+ #-out    /etc/ssl/certificate/localhost+1.pem \
+ #-keyout /etc/ssl/certificate/localhost+1-key.pem && \
+ #SSLCertificateFile    /etc/ssl/certs/localhost.crt      # CERTIFICATE
+ #SSLCertificateKeyFile /etc/ssl/private/localhost.key    # PRIVATE KEY
+ -out    /usr/local/etc/ssl/certificate/localhost.crt \
+ -keyout /usr/local/etc/ssl/certificate/localhost.key && \
+ sudo a2enmod ssl
 
 # @REVIEW Do not use "available sites", put directly on "sites-enabled".
 COPY ./apache2/sites-available /etc/apache2/sites-enabled
