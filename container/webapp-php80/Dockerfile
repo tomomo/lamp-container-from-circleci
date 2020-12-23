@@ -30,6 +30,37 @@ RUN \
  sudo a2enmod lbmethod_byrequests rewrite && \
  sudo a2dissite 000-default
 
+RUN \
+ sudo apt-get install -y \
+ # CURL
+ libcurl3-dev libonig-dev \
+ # PostgreSQL
+ libpq-dev \
+ # GD
+ libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+ # ImageMagick
+ imagemagick libmagickwand-dev \
+  && \
+ sudo apt-get clean
+
+RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
+  && \
+ sudo docker-php-ext-configure \
+ gd --with-freetype --with-jpeg \
+  && \
+ sudo docker-php-ext-install -j${NPROC} \
+ bcmath \
+ ctype \
+ curl \
+ exif \
+ xml \
+ gd \
+ intl \
+ mbstring \
+ tokenizer \
+ mysqli pdo_mysql \
+ pgsql pdo_pgsql
+
 # @REVIEW Do not use "available sites", put directly on "sites-enabled".
 COPY ./apache2/sites-available /etc/apache2/sites-enabled
 
