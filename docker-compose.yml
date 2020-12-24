@@ -25,3 +25,7 @@ services:
     build:
       context: .
       dockerfile: ./container/webapp-php70/Dockerfile
+  phpmyadmin:
+    build:
+      context: .
+      dockerfile: ./container/phpmyadmin/Dockerfile
