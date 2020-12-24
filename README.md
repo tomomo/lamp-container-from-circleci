@@ -17,6 +17,7 @@ PHPの動作確認などにぜひ。。。
 1. `docker-compose build`を実行する。
 1. lamp-container-from-circleci...のイメージができるのでそれを自身のプロジェクトの`docker-compose.yml`に指定して使用する。
     - `example-project-root`みたいな設定をして起動すれば、phpinfoが表示されるはず。
+        - http://localhost:3080/
         - http://localhost:3074/
         - http://localhost:3073/
         - http://localhost:3072/
@@ -25,3 +26,4 @@ PHPの動作確認などにぜひ。。。
 
 ## その他
 - [mkcert](https://github.com/FiloSottile/mkcert)などでローカル環境用SSLサーバ証明書を発行していれば、各サービスのvolumeに指定する事でhttpsも使用可能。
+- PHP8はImageMagickがコンパイル出来なかったので入ってない。
