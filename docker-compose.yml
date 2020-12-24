@@ -1,6 +1,10 @@
 version: '3.9'
 
 services:
+  webapp-php80:
+    build:
+      context: .
+      dockerfile: ./container/webapp-php80/Dockerfile
   webapp-php74:
     build:
       context: .
@@ -21,3 +25,7 @@ services:
     build:
       context: .
       dockerfile: ./container/webapp-php70/Dockerfile
+  phpmyadmin:
+    build:
+      context: .
+      dockerfile: ./container/phpmyadmin/Dockerfile
