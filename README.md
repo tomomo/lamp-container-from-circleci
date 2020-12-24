@@ -27,3 +27,4 @@ PHPの動作確認などにぜひ。。。
 ## その他
 - [mkcert](https://github.com/FiloSottile/mkcert)などでローカル環境用SSLサーバ証明書を発行していれば、各サービスのvolumeに指定する事でhttpsも使用可能。
 - PHP8はImageMagickがコンパイル出来なかったので入ってない。
+- apacheの設定ファイルに関して、本来`sites-available`に実体を置いてコマンドを叩き`sites-enabled`にシンボリックリンクが出来て有効になったりするのだが、`sites-enabled`に直接実体を置くようにした。（`volumes`での設定ファイル差し替えなどで都合がいいため。）
