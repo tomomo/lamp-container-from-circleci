@@ -1,4 +1,4 @@
-FROM circleci/php:7.1-apache-node-browsers
+FROM circleci/php:8.0-apache-node-browsers
 
 LABEL maintainer "tomomo <eclairpark@gmail.com>"
 
@@ -10,6 +10,7 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 
 RUN sudo cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+ sudo apt-get install -y sqlite3 libsqlite3-dev && \
  sudo apt-get update -y && \
  sudo apt-get upgrade -y && \
  sudo apt-get clean
@@ -25,26 +26,18 @@ RUN \
  # ImageMagick
  imagemagick libmagickwand-dev \
   && \
- sudo pecl install imagick redis \
-  && \
  sudo apt-get clean
 
-RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
- sudo docker-php-ext-configure \
-  gd \
-    --with-gd \
-    --with-freetype-dir=/usr/include/ \
-    --with-png-dir=/usr/include/ \
-    --with-jpeg-dir=/usr/include/ \
+RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
   && \
- sudo docker-php-ext-enable imagick redis \
+ sudo docker-php-ext-configure \
+ gd --with-freetype --with-jpeg \
   && \
  sudo docker-php-ext-install -j${NPROC} \
  bcmath \
  ctype \
  curl \
  exif \
- json \
  xml \
  gd \
  intl \
