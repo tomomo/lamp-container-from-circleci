@@ -11,7 +11,6 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 
 RUN sudo cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
  sudo apt-get update -y && \
- sudo apt-get upgrade -y && \
  sudo apt-get clean
 
 RUN \
