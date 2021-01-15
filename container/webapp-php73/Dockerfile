@@ -2,13 +2,6 @@ FROM circleci/php:7.3-apache-node-browsers
 
 LABEL maintainer "tomomo <eclairpark@gmail.com>"
 
-ENV APACHE_RUN_USER www-data
-ENV APACHE_RUN_GROUP www-data
-ENV APACHE_PID_FILE /var/run/apache2.pid
-ENV APACHE_RUN_DIR /var/run/apache2
-ENV APACHE_LOG_DIR /var/log/apache2
-ENV APACHE_LOCK_DIR /var/lock/apache2
-
 RUN sudo cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
  sudo apt-get update -y && \
  sudo apt-get upgrade -y && \
@@ -56,21 +49,24 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
 RUN \
  sudo a2dissite 000-default && \
  sudo a2enmod lbmethod_byrequests rewrite && \
- sudo mkdir -p /usr/local/etc/ssl/certificate && \
- sudo chown www-data /usr/local/etc/ssl/certificate && \
- sudo chmod 400 /usr/local/etc/ssl/certificate && \
+ sudo mkdir -p /etc/apache2/certs && \
+ sudo chown www-data /etc/apache2/certs && \
+ sudo chmod 640 /etc/apache2/certs && \
  sudo openssl req \
  -x509 -days 720 -nodes -newkey rsa:2048 \
  -subj "/C=JP/ST=Tokyo/L=Minato-ku/O=None/OU=Org/CN=localhost" \
- #-out    /etc/ssl/certificate/localhost+1.pem \
- #-keyout /etc/ssl/certificate/localhost+1-key.pem && \
- #SSLCertificateFile    /etc/ssl/certs/localhost.crt      # CERTIFICATE
- #SSLCertificateKeyFile /etc/ssl/private/localhost.key    # PRIVATE KEY
- -out    /usr/local/etc/ssl/certificate/localhost.crt \
- -keyout /usr/local/etc/ssl/certificate/localhost.key && \
+ -out    /etc/apache2/certs/localhost.crt \
+ -keyout /etc/apache2/certs/localhost.key && \
  sudo a2enmod ssl
 
 # @REVIEW Do not use "available sites", put directly on "sites-enabled".
 COPY ./apache2/sites-available /etc/apache2/sites-enabled
 
-CMD ["sudo", "apachectl", "-D", "FOREGROUND"]
+# ENV APACHE_RUN_USER www-data
+# ENV APACHE_RUN_GROUP www-data
+# ENV APACHE_PID_FILE /var/run/apache2.pid
+# ENV APACHE_RUN_DIR /var/run/apache2
+# ENV APACHE_LOG_DIR /var/log/apache2
+# ENV APACHE_LOCK_DIR /var/lock/apache2
+
+CMD ["sudo", "apache2-foreground"]
